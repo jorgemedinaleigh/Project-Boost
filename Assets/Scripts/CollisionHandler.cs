@@ -5,8 +5,25 @@ using UnityEngine.SceneManagement;
 
 public class CollisionHandler : MonoBehaviour
 {
+    [SerializeField] float delay = 2f;
+    [SerializeField] AudioClip explosion;
+    [SerializeField] AudioClip success;
+
+    AudioSource audioSource;
+
+    bool isTransitioning = false;
+    
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     void OnCollisionEnter(Collision other)
     {
+        if(isTransitioning)
+        {
+            return;
+        }
+
         switch(other.gameObject.tag)
         {
             case "Friendly":
@@ -14,16 +31,33 @@ public class CollisionHandler : MonoBehaviour
                 break;
             case "Finish":
                 Debug.Log("This is the Finish");
-                LoadNextLevel();
+                NextLevelSequence();
                 break;
             case "Fuel":
                 Debug.Log("Fuel picked");
                 break;
             default:
                 Debug.Log("You Explode!");
-                ReloadLevel();
+                StartCrash();
                 break;
         }
+    }
+
+    void StartCrash()
+    {
+        isTransitioning = true;
+        audioSource.Stop();
+        GetComponent<Movement>().enabled = false;
+        audioSource.PlayOneShot(explosion);
+        Invoke("ReloadLevel", delay);
+    }
+    void NextLevelSequence()
+    {
+        isTransitioning = true;
+        audioSource.Stop();
+        GetComponent<Movement>().enabled = false;
+        audioSource.PlayOneShot(success);
+        Invoke("LoadNextLevel", delay);
     }
 
     void ReloadLevel()

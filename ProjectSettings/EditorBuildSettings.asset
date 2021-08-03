@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Fly Over.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Middle Pass.unity
+    guid: 094a9bed0135b2d4fa7bf84c3e2dd33e
   m_configObjects: {}
